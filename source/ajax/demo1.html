@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script>
+        //        var xhr=new XMLHttpRequest();
+        //        xhr=new ActiveXObject('Microsoft.XMLHTTP');// *.dll 第一版
+        //        xhr=new ActiveXObject('Msxml2.XMLHTTP');// *.dll 第二版
+        //        xhr=new ActiveXObject('Msxml3.XMLHTTP');// *.dll 第三版
+        //
+
+        function getXHR() {
+            if (window.ActiveXObject) {
+                return new ActiveXObject('Microsoft.XMLHTTP');
+            }
+            //chrome ff opera safari ie7+
+            return new XMLHttpRequest();
+        }
+
+        var instance = getXHR(); //获取ajax对象的实例
+
+        /**
+         *  打开这个ajax对象
+         *  @param {string} http method 、。 http方法
+         *  @param {string} request url。 请求的服务器路径
+         *  @param {boolean} isAsync。 是不是异步 默认是true
+         *  @param {string} the username of url。 url里头的username 默认是undefined
+         *  @param {string} the password of url。 url里头的password 默认是undefined
+        **/
+        instance.open('get','getData.js',true,'username','possword');
+
+        /**
+         @param {String|ArrayBuffer|Blob|Document|FormData|null|undefined} [data]
+         */
+        instance.send('');//把参数放到请求主体里
+        /*
+         * @type {Function}
+         * 每当readystate改变的时候都会触发这个方法
+         */
+        instance.onreadystatechange=function(){
+            console.log('状态为:',instance.readyState);
+            if(instance.readyState==4&&instance.status==200){
+                console.log('responseText:',instance.responseText);
+                console.log('response:',instance.response);//这个由兼容性，低版本ie8-不支持
+                console.log('responseXML:',instance.responseXML);
+            }
+        };
+
+
+        /*
+        0 unsent 未发送，实例化的时候状态为这个
+        1 opened 打开实例  调用open方法之后 状态改变为这个
+        2 header-received 接收到服务器发送过来的响应头
+        3 loading 响应首部接收完毕，开始接收响应主体
+        4 done 全部完成
+        */
+
+
+
+    </script>
+</head>
+<body>
+
+</body>
+</html>

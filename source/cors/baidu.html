@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>百度下拉框</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            height: 1900px;
+        }
+
+        #content {
+            border: 1px solid #dbdbdb;
+            background-color: #fff;
+            width: 300px;
+        }
+
+        #content > ul {
+            list-style: none;
+        }
+
+        #content > ul > li {
+            line-height: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        #content > ul > li:hover {
+            background-color: #e7f2e6;
+            border: 1px solid #007aff;
+        }
+    </style>
+    <script src="jsonp.js"></script>
+    <script src="../lib/underscore.js"></script>
+    <script>
+        var getEle = function (id) {
+            return document.getElementById(id);
+        };
+        window.onload = function () {
+            var input = getEle('searchContent');
+            var button = getEle('searchButton');
+            var ul = document.getElementsByTagName('ul')[0];
+            ul.onmouseover = function (e) {
+                e = e || window.event;
+                var target = e.target || e.srcElement;
+                input.value = target.innerHTML;
+            };
+            ul.onclick = function (e) {
+                e = e || window.event;
+                var target = e.target || e.srcElement;
+                window.open('//www.baidu.com/s?wd=' + encodeURIComponent(target.innerHTML));
+            };
+            button.onclick = function () {
+                !!input.value && window.open('//www.baidu.com/s?wd=' + encodeURIComponent(input.value));
+            };
+            input.onkeypress = _.debounce(function () {
+                jsonp('http://suggestion.baidu.com/su?wd=' + encodeURIComponent(this.value), 'cb', function (data) {
+                    ul.innerHTML = "";
+                    var fragement = document.createDocumentFragment();
+                    _.each(data['s'], function (item, index) {
+                        var li = document.createElement('li');
+                        li.innerHTML = item;
+                        fragement.appendChild(li);
+                    });
+                    ul.appendChild(fragement);
+                })
+            }, 300);
+        }
+    </script>
+</head>
+<body>
+<input id="searchContent" type="text">
+<input id="searchButton" type="button" value="百度搜索">
+
+<div id="content">
+    <ul></ul>
+</div>
+</body>
+</html>

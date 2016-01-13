@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../lib/jquery.min.js"></script>
+    <script>
+        var ready = function (func) {
+            if (window.addEventListener) {
+                window.addEventListener('DOMContentLoaded', function () {
+                    func.call(null);
+                    console.log(this)
+                }, false);
+            } else {
+                document.attachEvent('onreadystatechange', function () {
+                    if (document.readyState == 'loading' || document.readyState == 'interactive') {
+                        func.call(null);
+                        console.log(this)
+                    }
+                });
+            }
+        };
+
+        ready(function () {
+            window.name = 'a';
+            $.ajax({
+                async: true,
+                beforeSend: function (xhr) {
+                    //在ajax open之前调用，用于操作xhr对象，如果此方法return false 则会强制终止ajax操作。
+                    //do something with xhr
+                    //return false ,force abort
+                },
+                cache: false,
+                complete: function () {
+                    //不管成功和失败，只要注册了这个方法，都会走这个逻辑
+                    console.log(arguments);
+                    console.log(this.name);
+                    //this的指向 就是上下文
+                    //test
+                },
+                contentType: 'application/x-www-form-urlencoded',
+                context: {name: 'test'},
+                data: {a: 1, b: 2},//a=1&b=2
+                dataFilter: function (response) {
+                    delete  response.name;
+                    response.self = 'abc';
+                    return response;
+                    //过滤完之后，传递给success
+                },
+                dataType: 'text',
+                error: function () {
+                    console.log(arguments);
+                    //http事务失败，或者响应状态码不是2开头的，或者根据dataType无法成功转化，超时
+                },
+                password: 'password',//ajax对象的第5个参数
+                username: 'username',//ajax对象的第4个参数
+                success: function () {
+                    //一切ok时  执行这个函数
+                    console.log('success:',arguments);
+                },
+                timeout:5000,//指定毫秒数内，http事务还未完成就会执行超时操作。
+                type:'get',
+                url:'/url'
+            })
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

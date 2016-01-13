@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="promise.js"></script>
+    <script src="ajax.js"></script>
+    <script>
+        window.onload=function(){
+            _.ajax({
+                url:'getData.js',
+                type:'get',
+                data:{name:'zyt',age:12},
+                headers:{'Content-Type':'application/x-www-form-urlencoded',
+                myself:'abcd'},
+                cache:false,
+                dataType:'json',
+                isAsync:true
+            }).then(function(){
+                console.log('success:',[].slice.call(arguments))
+            },function(){
+                console.log('error:',[].slice.call(arguments))
+            })
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>

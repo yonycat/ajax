@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="../../lib/jquery.js"></script>
+    <script>
+        $(function () {
+            $.ajax({
+                async: true,
+                beforeSend: function (xhr) {
+                    console.log('beforeSend:', xhr)
+                },
+                cache: false,
+                complete: function () {
+                    console.log('complete:', arguments);
+                    console.log('complete_name:', this.name);
+                },
+                contentType: 'application/x-www-form-urlencoded',
+                context: {name: 'test'},
+                data: {a: 1, b: 2},
+                headers: {'asddf': 'asdfasdf'},
+                dataFilter: function (response) {
+                    console.log('dataFilter:', response);
+                    return response;
+                },
+                dataType: 'json',
+                error: function () {
+                    console.log('error:', arguments);
+                },
+                password: 'password',
+                username: 'username',
+                success: function () {
+                    console.log('success:', arguments);
+                },
+                timeout: 5000,
+                type: 'get',
+                url: 'getData.json'
+            }).done(function (data) {
+                console.log('done:',data);
+            }).fail(function () {
+                console.log('fail:',arguments);
+            }).always(function(){
+                console.log('always:',arguments);
+            });
+        });
+
+        $.get('getData.json','json').done(function(){
+
+        }).fail(function(){
+
+        })
+    </script>
+</head>
+<body>
+hello world
+</body>
+</html>
